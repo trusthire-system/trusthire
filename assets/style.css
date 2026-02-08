@@ -1,0 +1,75 @@
+/* ==================== HIDE STREAMLIT DEPLOY NAVBAR ==================== */
+
+/* Hide the top header (Share, Settings, Deploy bar) */
+header[data-testid="stHeader"] {
+    display: none !important;
+}
+
+/* Hide any top-right toolbar (hamburger menu, etc.) */
+div[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Remove extra padding at the top after hiding header */
+section.main {
+    padding-top: 0px !important;
+}
+
+/* ==================== FAKE NAVBAR BUTTONS ==================== */
+
+/* Style all Streamlit buttons to look like navbar buttons */
+.stButton > button {
+    background-color: #0d6efd;    /* Blue background */
+    color: #ffffff;               /* White text */
+    font-weight: 600;
+    padding: 10px 25px;
+    margin: 5px;                  /* spacing between buttons */
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+    min-width: 100px;
+    position: relative;
+    z-index: 1;                   /* Buttons above fake navbar background */
+}
+
+/* Hover effect for buttons */
+.stButton > button:hover {
+    background-color: #ffc107;    /* Amber hover */
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Active page button style (manual highlight) */
+.stButton > button.active {
+    background-color: #198754;   /* Green active */
+    color: white;
+}
+
+/* Make buttons inline-block to appear horizontally */
+.stButton {
+    display: inline-block;
+}
+
+/* Fake navbar background behind buttons */
+div.block-container {
+    background-color: #e9ecef;    /* Light gray behind buttons */
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    position: relative;           /* Keep background in normal flow */
+    z-index: 0;                   /* Push background behind buttons */
+}
+
+/* Remove extra padding above buttons inside block container */
+section.main > div.block-container {
+    padding-top: 0rem !important;
+}
+
+/* General app font */
+[data-testid="stAppViewContainer"] {
+    font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+}
