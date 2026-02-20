@@ -29,8 +29,14 @@ if "db_initialized" not in st.session_state:
     create_tables()
     st.session_state.db_initialized = True
 
-with open("assets/style.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+def load_css():
+    with open("assets/style.css") as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+load_css()
+
+
+
 
 # ---------- BACKGROUND ----------
 def get_base64(file_path):
@@ -188,4 +194,4 @@ elif st.session_state.user:
         if user["role"] == "candidate":
             candidate_dashboard(user)
         elif user["role"] == "hr":
-            hr_dashboard(user)
+            hr_dashboard(user)  

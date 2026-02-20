@@ -76,6 +76,10 @@ def create_tables():
         )
     """)
 
+    # ✅ MIGRATION SAFE: add missing columns in users
+    _add_column_if_missing(cur, "users", "phone TEXT")  # ✅ REQUIRED for dashboard
+    _add_column_if_missing(cur, "users", "updated_at TEXT")  # optional future use
+
     # ---------- ADMINS ----------
     cur.execute("""
         CREATE TABLE IF NOT EXISTS admins (
@@ -134,8 +138,7 @@ def create_tables():
         )
     """)
 
-    # ---------- CANDIDATE PROFILE (NEW) ----------
-    # Base table
+    # ---------- CANDIDATE PROFILE ----------
     cur.execute("""
         CREATE TABLE IF NOT EXISTS candidate_profile (
             user_id INTEGER PRIMARY KEY,
@@ -147,7 +150,12 @@ def create_tables():
         )
     """)
 
-    # Add new columns (migration safe)
+    # ✅ REQUIRED by your new resume_parser + dashboard
+    _add_column_if_missing(cur, "candidate_profile", "gender TEXT")
+    _add_column_if_missing(cur, "candidate_profile", "nationality TEXT")
+    _add_column_if_missing(cur, "candidate_profile", "address TEXT")
+
+    # Existing extra columns you added earlier
     _add_column_if_missing(cur, "candidate_profile", "headline TEXT")
     _add_column_if_missing(cur, "candidate_profile", "location TEXT")
     _add_column_if_missing(cur, "candidate_profile", "summary TEXT")

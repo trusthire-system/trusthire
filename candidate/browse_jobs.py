@@ -2,6 +2,10 @@ import streamlit as st
 from datetime import datetime
 from db import get_connection
 
+from jobmatch.retrieve_score import retrieve_match_result
+from jobmatch.display_result import display_match_result
+
+
 def browse_jobs_page(user):
     st.title("💼 Browse Jobs")
 
@@ -26,6 +30,7 @@ def browse_jobs_page(user):
         st.warning("No jobs posted yet.")
         return
 
+    # 🔽 IMPORTANT: EVERYTHING BELOW IS INSIDE THE LOOP
     for job in jobs:
         job_id, role, location, experience, skills, description, company = job
 
@@ -33,11 +38,19 @@ def browse_jobs_page(user):
         st.subheader(role)
         st.write(f"🏢 Company: {company}")
         st.write(f"📍 Location: {location}")
-        st.write(f"🕒 Job Type: {job_type}")
         st.write(f"📄 Experience: {experience}")
-        st.write(f"🧠 Skills: {skills}")
+        st.write(f"🧠 Skills Required: {skills}")
         st.write(description)
 
+        # ✅ JOB MATCH SCORE (ALWAYS VISIBLE)
+        try:
+            score, matched, missing = retrieve_match_result(user["id"], job_id)
+            display_match_result(score, missing)
+        except Exception as e:
+            st.error("Error calculating match score")
+            st.exception(e)
+
+        # ✅ CHECK APPLICATION STATUS
         conn = get_connection()
         applied = conn.execute(
             "SELECT 1 FROM job_applications WHERE job_id=? AND candidate_id=?",
@@ -46,7 +59,7 @@ def browse_jobs_page(user):
         conn.close()
 
         if applied:
-            st.success("✅ Already Applied")
+            st.warning("⚠️ You already applied for this job")
         else:
             if st.button("Apply", key=f"apply_{job_id}"):
                 apply_job(user["id"], job_id)

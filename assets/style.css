@@ -73,3 +73,183 @@ section.main > div.block-container {
 [data-testid="stAppViewContainer"] {
     font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
+/* ==================== TRUSTHIRE HOME HEADER & HERO ==================== */
+
+.th-page {
+    min-height: 100vh;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+.th-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.th-header-left,
+.th-header-right {
+    display: flex;
+    align-items: center;
+}
+
+.th-header-right {
+    gap: 16px;
+}
+
+.th-logo {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #111827;
+    text-decoration: none;
+}
+
+.th-logo:hover {
+    color: #111827;
+    text-decoration: none;
+}
+
+.th-header-link {
+    font-size: 15px;
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.th-header-link:hover {
+    color: #111827;
+    text-decoration: underline;
+}
+
+.th-header-button {
+    padding: 8px 18px;
+    border-radius: 999px;
+    background-color: #111827;
+    color: #f9fafb;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, transform 0.15s ease,
+        box-shadow 0.15s ease;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+}
+
+.th-header-button:hover {
+    background-color: #020617;
+    color: #f9fafb;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
+}
+
+.th-hero {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px 56px;
+}
+
+.th-hero-content {
+    max-width: 640px;
+    text-align: center;
+}
+
+.th-hero-title {
+    font-size: 54px;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #111827;
+    margin-bottom: 16px;
+}
+
+.th-hero-subtitle {
+    font-size: 22px;
+    color: #4b5563;
+    margin-bottom: 10px;
+}
+
+.th-hero-description {
+    font-size: 15px;
+    color: #6b7280;
+    margin-bottom: 24px;
+}
+
+.th-hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.th-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: 999px;
+    background-color: #2563eb;
+    color: #f9fafb;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
+    transition: background-color 0.15s ease, transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.th-btn-primary:hover {
+    background-color: #1d4ed8;
+    color: #f9fafb;
+    text-decoration: none;
+    transform: translateY(-1px);
+    box-shadow: 0 14px 40px rgba(37, 99, 235, 0.45);
+}
+
+.th-hero-secondary {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.th-link-inline {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.th-link-inline:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .th-header {
+        padding: 14px 16px;
+    }
+
+    .th-hero {
+        padding: 32px 16px 40px;
+    }
+
+    .th-hero-title {
+        font-size: 38px;
+    }
+
+    .th-hero-subtitle {
+        font-size: 18px;
+    }
+}
