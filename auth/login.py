@@ -3,87 +3,67 @@ from db import get_connection, verify_password
 from datetime import datetime
 
 def login_page():
-    st.title("Login")
+    st.markdown("""
+        <div style='text-align: center; margin-top: 1rem; margin-bottom: 4rem;'>
+            <h2 class="animate-soft" style="letter-spacing: 0.1em; color: var(--accent) !important;">IDENTITY_VERIFICATION</h2>
+            <p class="text-dim mono" style="font-size: 0.85rem;">SECURE_TUNNEL_ESTABLISHED</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-    if "login_msg" in st.session_state:
-        msg, mtype = st.session_state.login_msg
-        if mtype == "success": st.success(msg)
-        elif mtype == "error": st.error(msg)
-        del st.session_state.login_msg
+    _, center_col, _ = st.columns([1, 2, 1])
+    with center_col:
+        with st.form("login_form"):
+            st.markdown("<p class='pill' style='margin-bottom: 2rem;'>AUTHENTICATION_REEL</p>", unsafe_allow_html=True)
+            email = st.text_input("EMAIL_ID", placeholder="USER@DOMAIN.COM")
+            password = st.text_input("ACCESS_KEY", type="password", placeholder="••••••••")
+            st.markdown("<div style='height: 1rem;'></div>", unsafe_allow_html=True)
+            submitted = st.form_submit_button("VALIDATE_IDENTITY", use_container_width=True)
 
-    # ---------- LOGIN FORM ----------
-    with st.form("login_form"):
-        email = st.text_input("Email")
-        password = st.text_input("Password", type="password")
-        submitted = st.form_submit_button("Login")
+        if submitted:
+            if not email or not password:
+                st.error("MISSING_CREDENTIALS")
+                return
 
-    if submitted:
-        if not email or not password:
-            st.error("❌ Please enter email and password")
-            return
+            conn = get_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT id, name, email, role, password, status, company_id FROM users WHERE email=?", (email.strip(),))
+            row = cur.fetchone()
 
-        conn = get_connection()
-        cur = conn.cursor()
+            if not row:
+                st.error("IDENTITY_NOT_FOUND")
+                conn.close()
+                return
 
-        cur.execute("""
-            SELECT id, name, email, role, password, status, company_id
-            FROM users
-            WHERE email=?
-        """, (email,))
-        row = cur.fetchone()
+            user_id, name, email_db, role, hashed_pass, status, company_id = row
 
-        if not row:
-            st.error("❌ Invalid email or password")
+            if not verify_password(password, hashed_pass):
+                st.error("CREDENTIAL_MISMATCH")
+                conn.close()
+                return
+
+            # Success logic
+            st.session_state.user = {
+                "id": user_id,
+                "name": name,
+                "email": email_db,
+                "role": role,
+                "company_id": company_id,
+                "status": status
+            }
             conn.close()
-            return
-
-        user_id, name, email_db, role, hashed_pass, status, company_id = row
-
-        if not verify_password(password, hashed_pass):
-            st.error("❌ Invalid email or password")
-            conn.close()
-            return
-
-        # ---------- NOT VERIFIED ----------
-        if status == "pending_verification":
-            st.warning("⚠️ Email not verified.")
-
-            if st.button("Resend Verification Email"):
-                st.session_state.page = "resend_verification"
+            st.success("ACCESS_GRANTED")
+            st.rerun()
+        
+        # Bottom links with soft tactile buttons
+        st.markdown("<div style='height: 4rem;'></div>", unsafe_allow_html=True)
+        sub_c1, sub_c2 = st.columns(2)
+        with sub_c1:
+            if st.button("NEW_IDENTITY", key="go_signup_btn", use_container_width=True):
+                st.session_state.page = "signup"
+                st.rerun()
+        with sub_c2:
+            if st.button("RECOVERY", key="go_forgot_btn", use_container_width=True):
+                st.session_state.page = "forgot_password"
                 st.rerun()
 
-            conn.close()
-            return
-
-        # ---------- HR PENDING ----------
-        if role == "hr" and status == "pending_approval":
-            st.warning("⏳ Your HR account is pending admin approval.")
-            conn.close()
-            return
-
-        # ---------- REJECTED ----------
-        if status == "rejected":
-            st.error("❌ Your account was rejected by admin.")
-            conn.close()
-            return
-
-        # ---------- UPDATE LAST LOGIN ----------
-        cur.execute(
-            "UPDATE users SET last_login=? WHERE id=?",
-            (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), user_id)
-        )
-        conn.commit()
-        conn.close()
-
-        # ---------- SESSION ----------
-        st.session_state.user = {
-            "id": user_id,
-            "name": name,
-            "email": email_db,
-            "role": role,
-            "company_id": company_id,
-            "status": status
-        }
-
-        st.success(f"✅ Welcome {name}!")
-        st.rerun()
+    st.markdown("<div style='height: 6rem;'></div>", unsafe_allow_html=True)

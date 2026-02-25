@@ -1,255 +1,433 @@
-/* ==================== HIDE STREAMLIT DEPLOY NAVBAR ==================== */
+/* ==========================================================================
+   NEUMORPHIC DESIGN SYSTEM v1.2
+   Focus: Holistic Navigation Redesign, Sidebar Evolution, Floating Headers
+   ========================================================================== */
 
-/* Hide the top header (Share, Settings, Deploy bar) */
-header[data-testid="stHeader"] {
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+    /* Neumorphic Palette */
+    --bg-main: #e0e0e0;
+    --shadow-dark: #bebebe;
+    --shadow-light: #ffffff;
+
+    /* Secondary Elements */
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-dim: #999999;
+
+    --accent: #4a90e2;
+    /* Soft Blue */
+    --accent-dark: #357abd;
+    --success: #66bb6a;
+    --error: #ef5350;
+
+    /* Layout */
+    --radius: 35px;
+    --radius-sm: 18px;
+    --radius-lg: 50px;
+    --radius-pill: 999px;
+
+    /* Transitions */
+    --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* ==========================================================================
+   Streamlit Boilerplate Detox
+   ========================================================================== */
+
+header[data-testid="stHeader"],
+div[data-testid="stToolbar"],
+footer {
     display: none !important;
 }
 
-/* Hide any top-right toolbar (hamburger menu, etc.) */
-div[data-testid="stToolbar"] {
-    display: none !important;
-}
-
-/* Remove extra padding at the top after hiding header */
-section.main {
-    padding-top: 0px !important;
-}
-
-/* ==================== FAKE NAVBAR BUTTONS ==================== */
-
-/* Style all Streamlit buttons to look like navbar buttons */
-.stButton > button {
-    background-color: #0d6efd;    /* Blue background */
-    color: #ffffff;               /* White text */
-    font-weight: 600;
-    padding: 10px 25px;
-    margin: 5px;                  /* spacing between buttons */
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease-in-out;
-    min-width: 100px;
-    position: relative;
-    z-index: 1;                   /* Buttons above fake navbar background */
-}
-
-/* Hover effect for buttons */
-.stButton > button:hover {
-    background-color: #ffc107;    /* Amber hover */
-    color: #000000;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-}
-
-/* Active page button style (manual highlight) */
-.stButton > button.active {
-    background-color: #198754;   /* Green active */
-    color: white;
-}
-
-/* Make buttons inline-block to appear horizontally */
-.stButton {
-    display: inline-block;
-}
-
-/* Fake navbar background behind buttons */
-div.block-container {
-    background-color: #e9ecef;    /* Light gray behind buttons */
-    padding: 10px 20px;
-    border-radius: 8px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    position: relative;           /* Keep background in normal flow */
-    z-index: 0;                   /* Push background behind buttons */
-}
-
-/* Remove extra padding above buttons inside block container */
-section.main > div.block-container {
-    padding-top: 0rem !important;
-}
-
-/* General app font */
 [data-testid="stAppViewContainer"] {
-    font-family: Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-main) !important;
+    color: var(--text-primary);
+    font-family: 'Outfit', sans-serif !important;
 }
 
-
-/* ==================== TRUSTHIRE HOME HEADER & HERO ==================== */
-
-.th-page {
-    min-height: 100vh;
-    background-color: #ffffff;
-    display: flex;
-    flex-direction: column;
+.stApp {
+    background: var(--bg-main) !important;
 }
 
-.th-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 32px;
-    border-bottom: 1px solid #e5e7eb;
-    background-color: #ffffff;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-.th-header-left,
-.th-header-right {
-    display: flex;
-    align-items: center;
-}
-
-.th-header-right {
-    gap: 16px;
-}
-
-.th-logo {
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #111827;
-    text-decoration: none;
-}
-
-.th-logo:hover {
-    color: #111827;
-    text-decoration: none;
-}
-
-.th-header-link {
-    font-size: 15px;
-    color: #4b5563;
-    text-decoration: none;
-}
-
-.th-header-link:hover {
-    color: #111827;
-    text-decoration: underline;
-}
-
-.th-header-button {
-    padding: 8px 18px;
-    border-radius: 999px;
-    background-color: #111827;
-    color: #f9fafb;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.15s ease, transform 0.15s ease,
-        box-shadow 0.15s ease;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
-}
-
-.th-header-button:hover {
-    background-color: #020617;
-    color: #f9fafb;
-    text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35);
-}
-
-.th-hero {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 16px 56px;
-}
-
-.th-hero-content {
-    max-width: 640px;
-    text-align: center;
-}
-
-.th-hero-title {
-    font-size: 54px;
-    line-height: 1.05;
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    color: #111827;
-    margin-bottom: 16px;
-}
-
-.th-hero-subtitle {
-    font-size: 22px;
-    color: #4b5563;
-    margin-bottom: 10px;
-}
-
-.th-hero-description {
-    font-size: 15px;
-    color: #6b7280;
-    margin-bottom: 24px;
-}
-
-.th-hero-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-}
-
-.th-btn-primary {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 28px;
-    border-radius: 999px;
-    background-color: #2563eb;
-    color: #f9fafb;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.35);
-    transition: background-color 0.15s ease, transform 0.15s ease,
-        box-shadow 0.15s ease;
-}
-
-.th-btn-primary:hover {
-    background-color: #1d4ed8;
-    color: #f9fafb;
-    text-decoration: none;
-    transform: translateY(-1px);
-    box-shadow: 0 14px 40px rgba(37, 99, 235, 0.45);
-}
-
-.th-hero-secondary {
-    font-size: 14px;
-    color: #6b7280;
-}
-
-.th-link-inline {
-    color: #2563eb;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.th-link-inline:hover {
-    color: #1d4ed8;
-    text-decoration: underline;
+/* Global Container Refinement */
+.block-container {
+    max-width: 1200px !important;
+    padding: 2rem 4rem !important;
 }
 
 @media (max-width: 768px) {
-    .th-header {
-        padding: 14px 16px;
+    .block-container {
+        padding: 1rem !important;
+    }
+}
+
+/* ==========================================================================
+   Sidebar Evolution (Tactile Sidebar)
+   ========================================================================== */
+
+[data-testid="stSidebar"] {
+    background-color: var(--bg-main) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 10px 0 20px var(--shadow-dark);
+}
+
+[data-testid="stSidebarUserContent"] {
+    padding-top: 2rem !important;
+}
+
+/* Sidebar Navigation Buttons */
+[data-testid="stSidebar"] .stButton>button {
+    background: var(--bg-main) !important;
+    box-shadow: 6px 6px 12px var(--shadow-dark),
+        -6px -6px 12px var(--shadow-light) !important;
+    border-radius: var(--radius-sm) !important;
+    margin: 0.8rem 0 !important;
+    padding: 1rem !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+}
+
+[data-testid="stSidebar"] .stButton>button:hover {
+    transform: translateX(5px);
+    color: var(--accent) !important;
+    box-shadow: 3px 3px 6px var(--shadow-dark),
+        -3px -3px 6px var(--shadow-light) !important;
+}
+
+/* ==========================================================================
+   Professional Fixed Top Navbar
+   ========================================================================== */
+
+.nm-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4rem;
+    background: rgba(224, 224, 224, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 999999;
+}
+
+.nav-brand {
+    font-size: 1.4rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    white-space: nowrap;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+/* Navbar Buttons integration - Precise alignment */
+.nm-nav-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.nm-nav-btn button {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0.6rem 1.4rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    color: var(--text-secondary) !important;
+    margin: 0 !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+    height: auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+}
+
+.nm-nav-btn button:hover {
+    color: var(--accent) !important;
+    background: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light) !important;
+}
+
+.nm-nav-btn button p {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+}
+
+.nm-nav-btn button:active {
+    box-shadow: inset 4px 4px 10px var(--shadow-dark),
+        inset -4px -4px 10px var(--shadow-light) !important;
+    transform: scale(0.98);
+}
+
+.nav-status {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding-left: 2rem;
+    margin-left: 1rem;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    height: 2.22rem;
+    /* Half the height of navbar approx */
+}
+
+/* ==========================================================================
+   Tactile Components (Neumorphism)
+   ========================================================================== */
+
+/* Flat Surface / Container - Deep Tactile Base */
+.nm-flat {
+    background: var(--bg-main);
+    box-shadow: 16px 16px 32px var(--shadow-dark),
+        -16px -16px 32px var(--shadow-light);
+    border-radius: var(--radius);
+    padding: 3rem;
+    margin-bottom: 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Extruded (Raised) Button - Kinetic Response */
+.stButton>button {
+    background: var(--bg-main) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    padding: 0.9rem 1.6rem !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.12em !important;
+    font-size: 0.75rem !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    box-shadow: 8px 8px 18px var(--shadow-dark),
+        -8px -8px 18px var(--shadow-light) !important;
+    margin: 8px 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    /* Sidebar/Standard buttons align left */
+    text-align: left !important;
+    width: 100% !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    min-width: fit-content !important;
+}
+
+.stButton>button:hover {
+    box-shadow: 4px 4px 10px var(--shadow-dark),
+        -4px -4px 10px var(--shadow-light) !important;
+    color: var(--accent) !important;
+    transform: scale(1.02) translateX(4px);
+    border: 1px solid var(--accent-dark) !important;
+}
+
+.stButton>button:active {
+    box-shadow: inset 6px 6px 12px var(--shadow-dark),
+        inset -6px -6px 12px var(--shadow-light) !important;
+    transform: scale(0.98);
+}
+
+/* Inset (Sunken) Inputs - Deeper, more defined */
+div[data-testid="stTextInput"] input,
+div[data-testid="stTextArea"] textarea,
+div[data-testid="stSelectbox"] div[role="button"],
+div[data-testid="stFileUploader"] section {
+    background: var(--bg-main) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    padding: 1.2rem !important;
+    color: var(--text-primary) !important;
+    box-shadow: inset 6px 6px 12px var(--shadow-dark),
+        inset -6px -6px 12px var(--shadow-light) !important;
+    transition: var(--transition) !important;
+}
+
+div[data-testid="stTextInput"] input:focus,
+div[data-testid="stTextArea"] textarea:focus {
+    box-shadow: inset 2px 2px 4px var(--shadow-dark),
+        inset -2px -2px 4px var(--shadow-light) !important;
+}
+
+/* Glass-Neumorphic Hybrid Card - State of the Art */
+.modern-card,
+div[data-testid="stForm"],
+div[data-testid="stVerticalBlockBorderWrapper"] {
+    background: rgba(224, 224, 224, 0.7) !important;
+    backdrop-filter: blur(20px);
+    padding: 3.5rem !important;
+    border-radius: var(--radius) !important;
+    box-shadow: 20px 20px 40px var(--shadow-dark),
+        -20px -20px 40px var(--shadow-light) !important;
+    margin-bottom: 3rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Premium Input Labels */
+label p {
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.15em !important;
+    font-size: 0.8rem !important;
+    color: var(--text-primary) !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* Status Pill - Integrated Inset */
+.pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 24px;
+    background: var(--bg-main);
+    box-shadow: inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    border-radius: var(--radius-pill);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--text-secondary);
+    font-weight: 800;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   Typography & Spacing Utilities
+   ========================================================================== */
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Outfit', sans-serif !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    letter-spacing: -0.02em;
+}
+
+p {
+    margin-top: 0 !important;
+    margin-bottom: 0.5rem !important;
+    line-height: 1.5 !important;
+}
+
+h1 {
+    font-size: 4rem !important;
+    line-height: 1.05 !important;
+}
+
+h2 {
+    font-size: 2.2rem !important;
+    line-height: 1.2 !important;
+}
+
+h3 {
+    font-size: 1.6rem !important;
+}
+
+.text-dim {
+    color: var(--text-dim) !important;
+}
+
+.mono {
+    font-family: 'JetBrains Mono', monospace !important;
+}
+
+/* Custom Spacing Dividers */
+.nm-divider {
+    height: 6px;
+    background: var(--bg-main);
+    box-shadow: inset 3px 3px 6px var(--shadow-dark),
+        inset -3px -3px 6px var(--shadow-light);
+    border-radius: 4px;
+    margin: 3rem 0;
+}
+
+/* Helper Classes */
+.mt-4 {
+    margin-top: 4rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 4rem !important;
+}
+
+.p-2 {
+    padding: 2rem !important;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes softAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.98);
     }
 
-    .th-hero {
-        padding: 32px 16px 40px;
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-soft {
+    animation: softAppear 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+@keyframes shiny {
+    0% {
+        background-position: -200%;
     }
 
-    .th-hero-title {
-        font-size: 38px;
+    100% {
+        background-position: 200%;
     }
+}
 
-    .th-hero-subtitle {
-        font-size: 18px;
-    }
+.shiny-text {
+    background: linear-gradient(90deg, var(--accent), #ffffff, var(--accent));
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shiny 3s linear infinite;
+    font-weight: 950 !important;
+}
+
+/* Streamlit specific adjustment for buttons in columns */
+div[data-testid="column"] .stButton>button {
+    width: 100% !important;
+}
+
+/* Inset Blocks for Details */
+.nm-inset {
+    background: var(--bg-main);
+    box-shadow: inset 5px 5px 10px var(--shadow-dark),
+        inset -5px -5px 10px var(--shadow-light);
+    border-radius: var(--radius-sm);
+    padding: 1.2rem;
+    margin-top: 0.5rem;
+    color: var(--text-primary);
 }

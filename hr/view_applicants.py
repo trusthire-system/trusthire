@@ -1,15 +1,17 @@
-import streamlit as st
-from db import get_connection
-
 def view_applicants_page(user):
-    st.header("👥 Applied Candidates")
+    st.markdown("""
+        <div style='margin-bottom: 2rem;'>
+            <h2 class="animate-soft" style="letter-spacing: 0.1em; color: var(--accent) !important;">TALENT_ACQUISITION_QUEUE</h2>
+            <p class="text-dim mono" style="font-size: 0.8rem;">MONITORING_CANDIDATE_INFLUX</p>
+        </div>
+    """, unsafe_allow_html=True)
 
     conn = get_connection()
     conn.row_factory = lambda cursor, row: {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
     
     # Fetch candidates who applied to HR's jobs
     candidates = conn.execute("""
-        SELECT ja.id as app_id, u.name, u.email, jp.role
+        SELECT ja.id as app_id, u.id as candidate_id, u.name, u.email, jp.role, u.resume_path
         FROM job_applications ja
         JOIN users u ON ja.candidate_id = u.id
         JOIN job_posts jp ON ja.job_id = jp.id
@@ -19,24 +21,28 @@ def view_applicants_page(user):
     conn.close()
 
     if not candidates:
-        st.info("No candidates have applied yet.")
+        st.markdown("<div class='modern-card' style='text-align: center; padding: 4rem;'><p class='text-dim mono'>EMPTY_DATASET: NO_APPLICANTS</p></div>", unsafe_allow_html=True)
         return
 
-    for idx, candidate in enumerate(candidates):
-        app_id = candidate["app_id"]
-        with st.expander(f"{candidate['name']} — {candidate['role']}", expanded=False):
-            st.write(f"**Email:** {candidate['email']}")
-            st.write(f"**Applied for:** {candidate['role']}")
-
-            # Example action: View Resume (if resume_path exists)
-            conn = get_connection()
-            resume_row = conn.execute("SELECT resume_path FROM users WHERE id=?", (candidate["app_id"],)).fetchone()
-            conn.close()
-            resume_path = resume_row[0] if resume_row else None
-
-            if resume_path:
-                try:
-                    with open(resume_path, "rb") as f:
-                        st.download_button("View Resume", f, file_name=f"{candidate['name']}_resume.pdf", key=f"resume_{app_id}_{idx}")
-                except:
-                    st.warning("Resume file missing or deleted.")
+    for cand in candidates:
+        with st.container(border=True):
+            c1, c2 = st.columns([3, 1])
+            with c1:
+                st.markdown(f"""
+                    <h3 style='margin-bottom: 0.5rem; color: var(--accent) !important;'>{cand['name'].upper()}</h3>
+                    <div class="mono" style="font-size: 0.9rem;">
+                        <span class="text-dim">EMAIL_ID:</span> {cand['email']}<br>
+                        <span class="text-dim">APPLIED_FOR:</span> {cand['role'].upper()}
+                    </div>
+                """, unsafe_allow_html=True)
+            
+            with c2:
+                st.markdown("<div style='height: 2rem;'></div>", unsafe_allow_html=True)
+                if cand["resume_path"]:
+                    try:
+                        with open(cand["resume_path"], "rb") as f:
+                            st.download_button("FETCH_RESUME", f, file_name=f"{cand['name']}_resume.pdf", key=f"dl_{cand['app_id']}", use_container_width=True)
+                    except:
+                        st.markdown("<p class='pill'>RESUME_MISSING</p>", unsafe_allow_html=True)
+                else:
+                    st.markdown("<p class='pill'>NO_RESUME</p>", unsafe_allow_html=True)
