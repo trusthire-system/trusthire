@@ -5,6 +5,12 @@ from datetime import datetime
 def login_page():
     st.title("Login")
 
+    if "login_msg" in st.session_state:
+        msg, mtype = st.session_state.login_msg
+        if mtype == "success": st.success(msg)
+        elif mtype == "error": st.error(msg)
+        del st.session_state.login_msg
+
     # ---------- LOGIN FORM ----------
     with st.form("login_form"):
         email = st.text_input("Email")

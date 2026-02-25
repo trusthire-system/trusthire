@@ -55,5 +55,6 @@ def verify_email_page(_=None):
 
     st.query_params.clear()
     st.session_state.page = "login"
-    st.success("✅ Email verified successfully! Redirecting to login...")
+    # SUCCESS: session message to survive rerun
+    st.session_state.login_msg = ("✅ Email verified successfully! You can now log in.", "success")
     st.rerun()

@@ -10,22 +10,41 @@ from utils.templates import template_account_rejected
 def admin_dashboard():
     inject_css()
 
-    # --- Top Bar with Logout Button ---
-    top_col1, top_col2 = st.columns([8, 1])
+    top_col1, top_col2, top_col3 = st.columns([7, 1, 1])
     with top_col1:
         st.markdown("<h1 class='title'>🛠️ Admin Dashboard</h1>", unsafe_allow_html=True)
         st.markdown("<p class='subtitle'>Review & Manage HR Approval Requests</p>", unsafe_allow_html=True)
     with top_col2:
+        if st.button("🔄 Refresh", key="refresh_btn"):
+            st.rerun()
+    with top_col3:
         if st.button("Logout", key="logout_btn"):
             st.session_state.admin = None
+            st.session_state.page = "home"
             st.success("Logged out!")
             st.rerun()
 
-    hrs = fetch_pending_hr()
+    # --- Handle Success/Error Messages from Session State ---
+    if "admin_msg" in st.session_state:
+        msg_text, msg_type = st.session_state.admin_msg
+        if msg_type == "success": st.success(msg_text)
+        elif msg_type == "error": st.error(msg_text)
+        elif msg_type == "warning": st.warning(msg_text)
+        del st.session_state.admin_msg
+
+    hrs = []
+    try:
+        hrs = fetch_pending_hr()
+        pass # fetched successfully
+    except Exception as e:
+        st.error(f"Error fetching data: {e}")
+        return
 
     if not hrs:
         st.markdown("<div class='empty'>🎉 No pending HR approvals!</div>", unsafe_allow_html=True)
         return
+
+    st.info(f"📋 There are {len(hrs)} pending HR account requests.")
 
     for user_id, name, email in hrs:
         render_hr_card(user_id, name, email)
@@ -33,11 +52,13 @@ def admin_dashboard():
 
 def fetch_pending_hr():
     conn = get_connection()
-    cur = conn.cursor()
-    cur.execute("SELECT id, name, email FROM users WHERE role='hr' AND status='pending_approval'")
-    data = cur.fetchall()
-    conn.close()
-    return data
+    try:
+        cur = conn.cursor()
+        cur.execute("SELECT id, name, email FROM users WHERE role='hr' AND status='pending_approval'")
+        data = cur.fetchall()
+        return data
+    finally:
+        conn.close()
 
 
 def render_hr_card(user_id, name, email):
@@ -50,7 +71,7 @@ def render_hr_card(user_id, name, email):
                     <div>
                         <div class='name'>{name}</div>
                         <div class='email'>{email}</div>
-                        <div class='badge-pending'>Pending Approval</div>
+                        <div class='badge-pending'>Pending Admin Approval</div>
                     </div>
                 </div>
             </div>
@@ -65,18 +86,19 @@ def render_hr_card(user_id, name, email):
                 sent, link = approve_hr(user_id, name, email)
 
                 if sent:
-                    st.success(f"Approved {name} → Verification email sent ✅")
+                    st.session_state.admin_msg = (f"Approved {name} → Verification email sent ✅", "success")
                 else:
-                    st.error("Approved, but email sending FAILED ❌")
-                    st.info("For local testing, open this verification link manually:")
-                    st.code(link)
+                    st.session_state.admin_msg = (f"Approved {name}, but email failed. Link: {link}", "warning")
 
                 st.rerun()
 
         with colB:
             if st.button("Reject", key=f"reject_{user_id}"):
-                reject_hr(user_id, name, email)
-                st.warning(f"Rejected {name}")
+                try:
+                    reject_hr(user_id, name, email)
+                    st.session_state.admin_msg = (f"Rejected {name} successfully.", "warning")
+                except Exception as e:
+                    st.session_state.admin_msg = (f"Failed to reject {name}: {e}", "error")
                 st.rerun()
 
         st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
